@@ -13,8 +13,6 @@ import RPi.GPIO as GPIO
 from RPLCD.gpio import CharLCD
 from datetime import datetime
 
-#test commit
-
 des_temp = 20.0
 
 current_temp = "0" # vairiable for holding the current temp
@@ -212,7 +210,11 @@ def lcd_loop(run_event):
 
 	while run_event.is_set():
 		if button_pressed == False:
-			lcd_write(0, "Temp is:" + current_temp + " C" + str(turn_on_off_count))
+			if len(turn_on_off_count) > 1:
+				count_string = str(turn_on_off_count)
+			else:
+				count_string = " " + str(turn_on_off_count)
+			lcd_write(0, "Temp is:" + current_temp + " C" + count_string)
 			lcd_write(1, "Desire temp:" + str(des_temp))
 		else:
 			lcd_write(0, "Change des Temp")
