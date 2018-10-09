@@ -90,8 +90,12 @@ def get_temp(run_event):
             try:
                 print("Trying to send message")
                 client.sendto(message.encode('utf_8'), (ip, port))
-                data, addr = client.recvfrom(1024)
-                if data == "changed":
+                d = client.recvfrom(1024)
+                data = d[0]
+                addr = d[1]
+                print(data.decode())
+                if data.decode() == "changed":
+                    print("working")
                     message = "temp please"
                     temp_changed = True
                 else:

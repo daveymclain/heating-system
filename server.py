@@ -83,6 +83,7 @@ def is_number(s):
         return False
 
 def server(run_event):
+	global des_temp
 	try :
 		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		print('Socket created')
@@ -107,7 +108,7 @@ def server(run_event):
 			addr = d[1]
 
 			if is_number(data):
-				des_temp == float(data)
+				des_temp = float(data.decode())
 				data = "changed"
 			else:
 				data = current_temp
