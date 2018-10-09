@@ -12,7 +12,7 @@ current_temperature = 0
 
 # Heating system contact information
 port = 1884
-ip = "192.168.0.21"
+ip = "192.168.0.42"
 
 run_event = threading.Event()
 
