@@ -225,7 +225,7 @@ def lcd_loop(run_event):
 			lcd_counter += 1
 			if lcd_counter == adjust_lcd_time:
 				button_pressed = False
-				lcd.clear()
+
 		time.sleep(0.1)
 
 def main(run_event):
