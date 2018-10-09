@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import time
-# time.sleep(30)
+time.sleep(30)
 import argparse
 import socket
 import sys
