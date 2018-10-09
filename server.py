@@ -75,7 +75,15 @@ GPIO.output(bluePin, GPIO.LOW)
 
 heating_on_off = False
 
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
 def server(run_event):
+	global des_temp
 	try :
 		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		print('Socket created')
@@ -99,13 +107,22 @@ def server(run_event):
 			data = d[0]
 			addr = d[1]
 
-			if not data:
-				continue
-			data = current_temp
-			reply = data
+			if is_number(data):
+				des_temp = float(data.decode())
+				data = "changed"
+			else:
+				data = current_temp
 
+			reply = data
 			s.sendto(data , addr)
 			print('Message[' + addr[0] + ':' + str(addr[1]) + '] - ' + data.strip())
+
+
+			if not data:
+				continue
+
+
+
 		except socket.timeout:
 			print("socket timeout")
 			continue
@@ -225,7 +242,7 @@ def lcd_loop(run_event):
 			lcd_counter += 1
 			if lcd_counter == adjust_lcd_time:
 				button_pressed = False
-				lcd.clear()
+
 		time.sleep(0.1)
 
 def main(run_event):

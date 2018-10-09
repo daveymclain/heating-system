@@ -9,6 +9,9 @@ import sys
 
 current_temperature = 0
 
+temp_changed = True
+
+message = "temp please"
 
 # Heating system contact information
 port = 1884
@@ -34,18 +37,51 @@ class App(threading.Thread):
 
     def run(self):
         self.root = Tk()
+        self.root.grid()
         self.root.protocol("WM_DELETE_WINDOW", self.callback)
+
+
+        self.UserIn = StringVar()
         self.var = StringVar()
+
+        self.label_new_temp = Label(self.root, text = "Enter a new desired temp: ",
+        font = ("Verdana", 20, "bold"))
+        self.label_new_temp.grid(row = 1, column = 1)
+
+        self.user_input = Entry(self.root, bg = "#5BC8AC", bd = 29,
+        insertwidth = 4, width = 6,
+        font = ("Verdana", 20, "bold"), textvariable = self.UserIn, justify = RIGHT)
+        self.user_input.grid(row = 1, column = 2)
+
+        self.user_input.insert(0, "20")
+
         self.var.set("\nthe current temperature is: " + str(current_temperature) + "\n")
-        self.label = Label(self.root, textvariable = self.var)
-        self.label.pack()
+        self.label_currebt_temp = Label(self.root, textvariable = self.var, font = ("Verdana", 20, "bold"))
+        self.label_currebt_temp.grid(row = 2, column = 1)
+
+        self.button1 = Button(self.root, bg = "#98DBC6", bd = 12,
+        text = "Send", padx = 33, pady = 25, font = ("Helvetica", 20, "bold"),
+        command = lambda : self.button_click())
+        self.button1.grid(row = 2, column = 2, sticky = W)
+
+        self.root.resizable(width = False, height = False)
         self.root.mainloop()
+
+    def button_click(self):
+        global message
+        global temp_changed
+
+        temp_changed = False
+
+        message = self.user_input.get()
+
 
 def get_temp(run_event):
     global current_temperature
     global app
     global var
-    message = "temp please"
+    global message
+
     server_test = 0
     while run_event.is_set():
         client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -54,8 +90,16 @@ def get_temp(run_event):
             try:
                 print("Trying to send message")
                 client.sendto(message.encode('utf_8'), (ip, port))
-                data, addr = client.recvfrom(1024)
-                current_temperature = float(data)
+                d = client.recvfrom(1024)
+                data = d[0]
+                addr = d[1]
+                print(data.decode())
+                if data.decode() == "changed":
+                    print("working")
+                    message = "temp please"
+                    temp_changed = True
+                else:
+                    current_temperature = float(data)
                 print("current_temperature: " + str(current_temperature))
                 app.var.set("the current temperature is: " + str(current_temperature))
                 # app.root.update_idletasks()
