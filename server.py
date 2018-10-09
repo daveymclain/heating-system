@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import time
-time.sleep(30)
+# time.sleep(30)
 import argparse
 import socket
 import sys
@@ -145,10 +145,13 @@ button_up = NewButton(up_button_pin)
 button_down = NewButton(down_button_pin, False)
 
 def lcd_write(line, text):
+	if len(text) < 16:
+		print("the text is shorter for the lcd by" + str((16 - len(text))))
+		output = text + " " * (16 - len(text))
+	else:
+		output = text
 	lcd.cursor_pos = (line, 0)
-	lcd.write_string(text)
-	lcd.cursor_pos = (line, 0)
-	lcd.write_string(text)
+	lcd.write_string(output)
 
 def read_temp_raw(sensor):
     f = open(sensor, 'r')
