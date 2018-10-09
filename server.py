@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import time
-time.sleep(30)
+time.sleep(10)
 import argparse
 import socket
 import sys
@@ -17,7 +17,7 @@ des_temp = 20.0
 
 current_temp = "0" # vairiable for holding the current temp
 
-HOST = '192.168.0.21'   # Symbolic name meaning all available interfaces
+HOST = '192.168.0.42'   # Symbolic name meaning all available interfaces
 PORT = 1884 # Arbitrary non-privileged port
 
 turn_on_off_count = 0 # counter for the turn off or on
