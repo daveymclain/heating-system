@@ -13,6 +13,8 @@ import RPi.GPIO as GPIO
 from RPLCD.gpio import CharLCD
 from datetime import datetime
 
+#test commit
+
 des_temp = 20.0
 
 current_temp = "0" # vairiable for holding the current temp
