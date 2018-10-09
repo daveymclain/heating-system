@@ -210,7 +210,7 @@ def lcd_loop(run_event):
 
 	while run_event.is_set():
 		if button_pressed == False:
-			if len(turn_on_off_count) > 1:
+			if len(str(turn_on_off_count)) > 1:
 				count_string = str(turn_on_off_count)
 			else:
 				count_string = " " + str(turn_on_off_count)
