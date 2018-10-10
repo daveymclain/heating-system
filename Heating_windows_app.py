@@ -101,6 +101,7 @@ def get_temp(run_event):
     global var
     global message
 
+    last_pic = "False"
     server_test = 0
     while run_event.is_set():
         client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -118,9 +119,12 @@ def get_temp(run_event):
                     print("working")
                     message = "temp please"
                     temp_changed = True
-                if data[1] == "True":
+
+                if data[1] == "True" != last_pic:
                     app.image_update(True)
-                else:
+                    last_pic = "True"
+                elif data[1] == "False" != last_pic:
+                    last_pic = "False"
                     app.image_update(False)
 
                 current_temperature = float(data[0])
