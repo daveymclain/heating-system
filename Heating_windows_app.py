@@ -6,6 +6,10 @@ import time
 import socket
 import os
 import sys
+from pathlib import Path
+import pickle
+
+image_folder = Path("C:/Users/brave/Desktop/Git/images")
 
 current_temperature = 0
 
@@ -33,6 +37,14 @@ class App(threading.Thread):
         run_event.clear()
         t1.join()
         sys.exit()
+
+    def image_update(self, on):
+        if on:
+            self.image = PhotoImage(file = image_folder / "on.png")
+            self.label_image.configure(image=self.image)
+        else:
+            self.image = PhotoImage(file = image_folder / "off.png")
+            self.label_image.configure(image=self.image)
 
 
     def run(self):
@@ -64,12 +76,19 @@ class App(threading.Thread):
         command = lambda : self.button_click())
         self.button1.grid(row = 2, column = 2, sticky = W)
 
+        self.image = PhotoImage(file = image_folder / "off.png")
+
+        self.label_image = Label(image = self.image)
+        self.label_image.grid(row = 3)
+
         self.root.resizable(width = False, height = False)
         self.root.mainloop()
 
     def button_click(self):
         global message
         global temp_changed
+
+
 
         temp_changed = False
 
@@ -93,13 +112,18 @@ def get_temp(run_event):
                 d = client.recvfrom(1024)
                 data = d[0]
                 addr = d[1]
-                print(data.decode())
-                if data.decode() == "changed":
+                data = pickle.loads(data)
+                print(data)
+                if data[2] == "changed":
                     print("working")
                     message = "temp please"
                     temp_changed = True
+                if data[1] == "True":
+                    app.image_update(True)
                 else:
-                    current_temperature = float(data)
+                    app.image_update(False)
+
+                current_temperature = float(data[0])
                 print("current_temperature: " + str(current_temperature))
                 app.var.set("the current temperature is: " + str(current_temperature))
                 # app.root.update_idletasks()
