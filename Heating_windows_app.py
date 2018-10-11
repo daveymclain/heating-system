@@ -67,7 +67,7 @@ class App(threading.Thread):
 
         self.user_input.insert(0, "20")
 
-        self.var.set("\nthe current temperature is: " + str(current_temperature) + "\n")
+        self.var.set("The current temperature is: " + str(current_temperature) + "\n")
         self.label_currebt_temp = Label(self.root, textvariable = self.var, font = ("Verdana", 20, "bold"))
         self.label_currebt_temp.grid(row = 2, column = 1)
 
@@ -79,7 +79,7 @@ class App(threading.Thread):
         self.image = PhotoImage(file = image_folder / "off.png")
 
         self.label_image = Label(image = self.image)
-        self.label_image.grid(row = 3)
+        self.label_image.grid(row = 3, column = 2)
 
         self.root.resizable(width = False, height = False)
         self.root.mainloop()
@@ -128,8 +128,12 @@ def get_temp(run_event):
                     app.image_update(False)
 
                 current_temperature = float(data[0])
+
+                app.user_input.delete(0, END)
+                app.user_input.insert(0, data[3]) # update the input with the current des temp on the pi
+
                 print("current_temperature: " + str(current_temperature))
-                app.var.set("the current temperature is: " + str(current_temperature))
+                app.var.set("The current temperature is: " + str(current_temperature))
                 # app.root.update_idletasks()
                 time.sleep(6)
             except socket.timeout:

@@ -118,7 +118,7 @@ def server(run_event):
 
 
 
-            send_list = [current_temp, str(heating_on_off), changed]
+            send_list = [current_temp, str(heating_on_off), changed, str(des_temp)]
             reply = pickle.dumps(send_list)
             s.sendto(reply , addr)
             print('Message[' + addr[0] + ':' + str(addr[1]) + '] - ' + data.strip())
