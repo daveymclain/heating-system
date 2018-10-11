@@ -6,6 +6,10 @@ import time
 import socket
 import os
 import sys
+from pathlib import Path
+import pickle
+
+image_folder = Path("C:/Users/brave/Desktop/Git/images")
 
 current_temperature = 0
 
@@ -34,6 +38,14 @@ class App(threading.Thread):
         t1.join()
         sys.exit()
 
+    def image_update(self, on):
+        if on:
+            self.image = PhotoImage(file = image_folder / "on.png")
+            self.label_image.configure(image=self.image)
+        else:
+            self.image = PhotoImage(file = image_folder / "off.png")
+            self.label_image.configure(image=self.image)
+
 
     def run(self):
         self.root = Tk()
@@ -55,7 +67,7 @@ class App(threading.Thread):
 
         self.user_input.insert(0, "20")
 
-        self.var.set("\nthe current temperature is: " + str(current_temperature) + "\n")
+        self.var.set("The current temperature is: " + str(current_temperature) + "\n")
         self.label_currebt_temp = Label(self.root, textvariable = self.var, font = ("Verdana", 20, "bold"))
         self.label_currebt_temp.grid(row = 2, column = 1)
 
@@ -64,12 +76,19 @@ class App(threading.Thread):
         command = lambda : self.button_click())
         self.button1.grid(row = 2, column = 2, sticky = W)
 
+        self.image = PhotoImage(file = image_folder / "off.png")
+
+        self.label_image = Label(image = self.image)
+        self.label_image.grid(row = 3, column = 2)
+
         self.root.resizable(width = False, height = False)
         self.root.mainloop()
 
     def button_click(self):
         global message
         global temp_changed
+
+
 
         temp_changed = False
 
@@ -82,6 +101,7 @@ def get_temp(run_event):
     global var
     global message
 
+    last_pic = "False"
     server_test = 0
     while run_event.is_set():
         client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -93,15 +113,27 @@ def get_temp(run_event):
                 d = client.recvfrom(1024)
                 data = d[0]
                 addr = d[1]
-                print(data.decode())
-                if data.decode() == "changed":
+                data = pickle.loads(data)
+                print(data)
+                if data[2] == "changed":
                     print("working")
                     message = "temp please"
                     temp_changed = True
-                else:
-                    current_temperature = float(data)
+
+                if data[1] == "True" != last_pic:
+                    app.image_update(True)
+                    last_pic = "True"
+                elif data[1] == "False" != last_pic:
+                    last_pic = "False"
+                    app.image_update(False)
+
+                current_temperature = float(data[0])
+
+                app.user_input.delete(0, END)
+                app.user_input.insert(0, data[3]) # update the input with the current des temp on the pi
+
                 print("current_temperature: " + str(current_temperature))
-                app.var.set("the current temperature is: " + str(current_temperature))
+                app.var.set("The current temperature is: " + str(current_temperature))
                 # app.root.update_idletasks()
                 time.sleep(6)
             except socket.timeout:
