@@ -88,7 +88,7 @@ class App(threading.Thread):
         global message
         global temp_changed
 
-
+        self.root.focus_force()
 
         temp_changed = False
 
@@ -126,11 +126,12 @@ def get_temp(run_event):
                 elif data[1] == "False" != last_pic:
                     last_pic = "False"
                     app.image_update(False)
+                print(app.root.focus_get())
 
                 current_temperature = float(data[0])
-
-                app.user_input.delete(0, END)
-                app.user_input.insert(0, data[3]) # update the input with the current des temp on the pi
+                if "." == str(app.root.focus_get()):
+                    app.user_input.delete(0, END)
+                    app.user_input.insert(0, data[3]) # update the input with the current des temp on the pi
 
                 print("current_temperature: " + str(current_temperature))
                 app.var.set("The current temperature is: " + str(current_temperature))
