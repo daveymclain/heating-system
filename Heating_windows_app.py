@@ -81,6 +81,7 @@ class App(threading.Thread):
         self.label_image = Label(image = self.image)
         self.label_image.grid(row = 3, column = 2)
 
+        self.root.title("Goss Heating System")
         self.root.resizable(width = False, height = False)
         self.root.mainloop()
 
@@ -88,11 +89,22 @@ class App(threading.Thread):
         global message
         global temp_changed
 
-        self.root.focus_force()
+
 
         temp_changed = False
 
+
         message = self.user_input.get()
+        print(message)
+        try:
+            float(message)
+        except ValueError:
+            app.user_input.delete(0, END)
+            app.user_input.insert(0, "Error")
+            messgae = "temp please"
+
+
+        self.root.focus_force()
 
 
 def get_temp(run_event):
@@ -126,7 +138,7 @@ def get_temp(run_event):
                 elif data[1] == "False" != last_pic:
                     last_pic = "False"
                     app.image_update(False)
-                print(app.root.focus_get())
+
 
                 current_temperature = float(data[0])
                 if "." == str(app.root.focus_get()):
