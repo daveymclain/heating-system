@@ -1,7 +1,6 @@
 # Run tkinter code in another thread
 
 from tkinter import *
-from tkinter.ttk import *
 import threading
 import time
 import socket
@@ -53,26 +52,28 @@ class App(threading.Thread):
         self.root.grid()
         self.root.protocol("WM_DELETE_WINDOW", self.callback)
 
-        self.style = Style()
-        self.style.configure("BW.TLabel", foreground="black", background="white",     font = ("Verdana", 20, "bold"))
-
 
         self.UserIn = StringVar()
         self.var = StringVar()
 
-        self.label_new_temp = Label(self.root, text = "Enter a new desired temp: ", style="BW.TLabel")
+        self.label_new_temp = Label(self.root, text = "Enter a new desired temp: ",
+        font = ("Verdana", 20, "bold"))
         self.label_new_temp.grid(row = 1, column = 1)
 
-        self.user_input = Entry(self.root, style="BW.TLabel", textvariable = self.UserIn, justify = RIGHT)
+        self.user_input = Entry(self.root, bg = "#5BC8AC", bd = 29,
+        insertwidth = 4, width = 6,
+        font = ("Verdana", 20, "bold"), textvariable = self.UserIn, justify = RIGHT)
         self.user_input.grid(row = 1, column = 2)
 
         self.user_input.insert(0, "20")
 
         self.var.set("The current temperature is: " + str(current_temperature) + "\n")
-        self.label_currebt_temp = Label(self.root, textvariable = self.var, style="BW.TLabel")
+        self.label_currebt_temp = Label(self.root, textvariable = self.var, font = ("Verdana", 20, "bold"))
         self.label_currebt_temp.grid(row = 2, column = 1)
 
-        self.button1 = Button(self.root, text = "Send", style="BW.TLabel", command = lambda : self.button_click())
+        self.button1 = Button(self.root, bg = "#98DBC6", bd = 12,
+        text = "Send", padx = 33, pady = 25, font = ("Helvetica", 20, "bold"),
+        command = lambda : self.button_click())
         self.button1.grid(row = 2, column = 2, sticky = W)
 
         self.image = PhotoImage(file = image_folder / "off.png")
@@ -88,10 +89,7 @@ class App(threading.Thread):
         global message
         global temp_changed
 
-
-
         temp_changed = False
-
 
         message = self.user_input.get()
         print(message)
@@ -101,9 +99,9 @@ class App(threading.Thread):
             app.user_input.delete(0, END)
             app.user_input.insert(0, "Error")
             messgae = "temp please"
-
-
         self.root.focus_force()
+
+
 
 
 def get_temp(run_event):
@@ -137,7 +135,6 @@ def get_temp(run_event):
                 elif data[1] == "False" != last_pic:
                     last_pic = "False"
                     app.image_update(False)
-
 
                 current_temperature = float(data[0])
                 if "." == str(app.root.focus_get()):
