@@ -14,6 +14,8 @@ from RPLCD.gpio import CharLCD
 from datetime import datetime
 import pickle
 
+temp_adjust = 0.2 # amount that the buttons change temp
+
 des_temp = 20.0
 
 current_temp = "0" # vairiable for holding the current temp
@@ -156,9 +158,9 @@ class NewButton():
             button_state = GPIO.input(self.pin)
             if button_state == False:
                 if self.up:
-                    des_temp += 0.5
+                    des_temp += temp_adjust
                 else:
-                    des_temp -= 0.5
+                    des_temp -= temp_adjust
                 print("Up button pressed. New desired temp: " + str(des_temp))
                 button_pressed = True
                 lcd_counter = 0
