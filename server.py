@@ -78,6 +78,10 @@ GPIO.output(bluePin, GPIO.LOW)
 
 heating_on_off = False
 
+def change_des_temp(new_temp):
+    with open("temp.txt", "w") as f:
+        f.write(str(new_temp))
+
 def is_number(s):
     try:
         float(s)
@@ -114,6 +118,7 @@ def server(run_event):
             if is_number(data):
                 des_temp = float(data.decode())
                 changed = "changed"
+                change_des_temp(des_temp)
             else:
                 changed = "not changed"
                 data = current_temp
@@ -159,8 +164,10 @@ class NewButton():
             if button_state == False:
                 if self.up:
                     des_temp += temp_adjust
+                    change_des_temp(des_temp)
                 else:
                     des_temp -= temp_adjust
+                    change_des_temp(des_temp)
                 print("Up button pressed. New desired temp: " + str(des_temp))
                 button_pressed = True
                 lcd_counter = 0
@@ -291,8 +298,12 @@ def heating_on_off_logic(on_or_off):
 
 def start():
     global run_event
+    global des_temp
     print("Warming up")
     GPIO.output(bluePin, GPIO.HIGH)
+    with open("temp.txt") as f:
+        des_temp = f.read()
+        print("got desired temp from file. Temp is " + des_temp)
     servo(0)
     time.sleep(3)
     GPIO.output(bluePin, GPIO.LOW)
