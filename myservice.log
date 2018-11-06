@@ -1,0 +1,71 @@
+2018-11-06 13:09:38,067 INFO     Warming up
+2018-11-06 13:09:38,071 INFO     servo test
+2018-11-06 13:09:41,084 INFO     21.5
+2018-11-06 13:09:41,087 INFO     Trying to turn on heating
+2018-11-06 13:09:42,609 INFO     the text is shorter for the lcd by3
+2018-11-06 13:09:43,149 INFO     Socket created
+2018-11-06 13:09:43,151 INFO     Socket bind complete
+2018-11-06 13:09:43,950 INFO     21.5
+2018-11-06 13:09:43,952 INFO     Trying to turn on heating
+2018-11-06 13:09:46,691 INFO     Message[192.168.0.31:57063] - 21.8
+2018-11-06 13:09:46,839 INFO     21.5
+2018-11-06 13:09:46,840 INFO     Trying to turn on heating
+2018-11-06 13:09:49,719 INFO     21.5
+2018-11-06 13:09:49,721 INFO     Trying to turn on heating
+2018-11-06 13:09:52,599 INFO     21.5
+2018-11-06 13:09:52,601 INFO     Trying to turn on heating
+2018-11-06 13:09:52,602 INFO     servo test
+2018-11-06 13:09:52,604 INFO     turning the heating on.
+2018-11-06 13:09:52,731 INFO     Message[192.168.0.31:57063] - 21.8
+2018-11-06 13:09:58,764 INFO     Message[192.168.0.31:57063] - 21.8
+2018-11-06 13:10:04,777 INFO     Message[192.168.0.31:57063] - 21.8
+2018-11-06 13:10:08,199 INFO     21.5
+2018-11-06 13:10:08,201 INFO     Trying to turn on heating
+2018-11-06 13:10:10,792 INFO     Message[192.168.0.31:57063] - 21.8
+2018-11-06 13:10:11,079 INFO     21.5
+2018-11-06 13:10:11,081 INFO     Trying to turn on heating
+2018-11-06 13:10:13,959 INFO     21.5
+2018-11-06 13:10:13,961 INFO     Trying to turn on heating
+2018-11-06 13:10:16,836 INFO     21.5
+2018-11-06 13:10:16,842 INFO     Trying to turn on heating
+2018-11-06 13:10:16,839 INFO     Message[192.168.0.31:57063] - 21.8
+2018-11-06 13:10:19,719 INFO     21.5
+2018-11-06 13:10:19,722 INFO     Trying to turn on heating
+2018-11-06 13:10:19,724 INFO     servo test
+2018-11-06 13:10:22,590 INFO     21.5
+2018-11-06 13:10:22,597 INFO     Trying to turn on heating
+2018-11-06 13:10:22,865 INFO     Message[192.168.0.31:57063] - 21.8
+2018-11-06 13:10:25,479 INFO     21.5
+2018-11-06 13:10:25,481 INFO     Trying to turn on heating
+2018-11-06 13:10:28,359 INFO     21.5
+2018-11-06 13:10:28,361 INFO     Trying to turn on heating
+2018-11-06 13:10:28,886 INFO     Message[192.168.0.31:57063] - 21.8
+2018-11-06 13:10:31,239 INFO     21.5
+2018-11-06 13:10:31,241 INFO     Trying to turn on heating
+2018-11-06 13:10:34,119 INFO     21.5
+2018-11-06 13:10:34,121 INFO     Trying to turn on heating
+2018-11-06 13:10:34,122 INFO     servo test
+2018-11-06 13:10:34,901 INFO     Message[192.168.0.31:57063] - 21.8
+2018-11-06 13:10:36,998 INFO     21.5
+2018-11-06 13:10:37,000 INFO     Trying to turn on heating
+2018-11-06 13:10:39,879 INFO     21.5
+2018-11-06 13:10:39,881 INFO     Trying to turn on heating
+2018-11-06 13:10:40,924 INFO     Message[192.168.0.31:57063] - 21.8
+2018-11-06 13:10:42,753 INFO     21.5
+2018-11-06 13:10:42,754 INFO     Trying to turn on heating
+2018-11-06 13:10:45,559 INFO     21.5
+2018-11-06 13:10:45,565 INFO     Trying to turn on heating
+2018-11-06 13:10:46,953 INFO     Message[192.168.0.31:57063] - 21.8
+2018-11-06 13:10:48,439 INFO     21.5
+2018-11-06 13:10:48,441 INFO     Trying to turn on heating
+2018-11-06 13:10:48,442 INFO     servo test
+2018-11-06 13:10:51,329 INFO     21.5
+2018-11-06 13:10:51,331 INFO     Trying to turn on heating
+2018-11-06 13:10:52,977 INFO     Message[192.168.0.31:57063] - 21.8
+2018-11-06 13:10:54,199 INFO     21.5
+2018-11-06 13:10:54,201 INFO     Trying to turn on heating
+2018-11-06 13:10:58,039 INFO     21.5
+2018-11-06 13:10:58,041 INFO     Trying to turn on heating
+2018-11-06 13:10:58,995 INFO     Message[192.168.0.31:57063] - 21.8
+2018-11-06 13:11:00,959 INFO     21.5
+2018-11-06 13:11:00,961 INFO     Trying to turn on heating
