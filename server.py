@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import time
-time.sleep(60)
+time.sleep(10)
 import argparse
 import socket
 import sys
@@ -17,7 +17,9 @@ import logging
 import logging.handlers
 import argparse
 
+day_des_temp = 21.0
 
+night_des_temp = 20.0
 
 # Deafults
 LOG_FILENAME = "/tmp/myservice.log"
@@ -130,6 +132,23 @@ GPIO.output(bluePin, GPIO.LOW)
 
 heating_on_off = False
 
+# Night mode
+
+night_start_time = datetime.strptime('21:00','%H:%M')
+
+night_end_time = datetime.strptime('06:30','%H:%M')
+
+# dnow = datetime.now()  #11:42 am here ;)
+
+night = False
+
+def compare_times(t):
+    global night
+    if t.time() > night_start_time.time() or t.time() < night_end_time.time():
+        night = True
+    else:
+        night = False
+
 class textfile:
     def __init__(self, extention, file):
         self.path = extention + file
@@ -188,7 +207,7 @@ def server(run_event):
 
 
 
-            send_list = [current_temp, str(heating_on_off), changed, str(des_temp)]
+            send_list = [current_temp, str(heating_on_off), changed, str(des_temp), str(night)]
             reply = pickle.dumps(send_list)
             s.sendto(reply , addr)
             print('Message[' + addr[0] + ':' + str(addr[1]) + '] - ' + data.strip())
@@ -219,19 +238,27 @@ class NewButton():
         self.pin = pin
         self.up = up
     def loop(self,run_event):
-        global des_temp
+        global night_des_temp
+        global day_des_temp
         global button_pressed
         global lcd_counter
         while run_event.is_set():
             button_state = GPIO.input(self.pin)
             if button_state == False:
                 if self.up:
-                    des_temp += temp_adjust
-                    des_temp_file.write(str(des_temp))
+                    if night:
+                        night_des_temp += temp_adjust
+                        des_temp_file.write(str(night_des_temp))
+                    else:
+                        day_des_temp += temp_adjust
+                        des_temp_file.write(str(day_des_temp))
                 else:
-                    des_temp -= temp_adjust
-                    des_temp_file.write(str(des_temp))
-                print("Up button pressed. New desired temp: " + str(des_temp))
+                    if night:
+                        night_des_temp -= temp_adjust
+                        des_temp_file.write(str(night_des_temp))
+                    else:
+                        day_des_temp -= temp_adjust
+                        des_temp_file.write(str(day_des_temp))                print("Up button pressed. New desired temp: " + str(des_temp))
                 button_pressed = True
                 lcd_counter = 0
                 time.sleep(0.2)
@@ -307,16 +334,20 @@ def lcd_loop(run_event):
     global button_pressed
 
     while run_event.is_set():
+        if night:
+            n = "N "
+        else:
+            n = "D "
         if button_pressed == False:
             if len(str(turn_on_off_count)) > 1:
                 count_string = str(turn_on_off_count)
             else:
                 count_string = " " + str(turn_on_off_count)
             lcd_write(0, "Temp is:" + current_temp + " C" + count_string)
-            lcd_write(1, "Desire temp:" + str(des_temp))
+            lcd_write(1,n + "Des temp:" + str(des_temp))
         else:
             lcd_write(0, "Change des Temp")
-            lcd_write(1, "Desire temp:" + str(des_temp))
+            lcd_write(1,n + "Des temp:" + str(des_temp))
             lcd_counter += 1
             if lcd_counter == adjust_lcd_time:
                 button_pressed = False
@@ -336,6 +367,14 @@ def main(run_event):
             GPIO.output(greenPin, GPIO.LOW)
         # print("The temperature is: "+ str(compare_temps()))
         print(des_temp)
+
+        compare_times(datetime.now()) # see if it is night or day
+
+        if night:
+            des_temp = night_des_temp
+        else:
+            des_temp = day_des_temp
+
         if float(current_temp) < des_temp:
             print("Trying to turn on heating")
             heating_on_off_logic(True)
@@ -364,7 +403,7 @@ def start():
     global des_temp
     print("Warming up")
     GPIO.output(bluePin, GPIO.HIGH)
-    des_temp = des_temp_file.read()
+    des_temp = float(des_temp_file.read())
     servo(0)
     time.sleep(3)
     GPIO.output(bluePin, GPIO.LOW)
