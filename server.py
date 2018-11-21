@@ -66,8 +66,6 @@ sys.stdout = MyLogger(logger, logging.INFO)
 sys.stderr = MyLogger(logger, logging.ERROR)
 
 
-
-
 temp_adjust = 0.2 # amount that the buttons change temp
 
 des_temp = 20.0
@@ -173,7 +171,8 @@ def is_number(s):
 
 def server(run_event):
     changed = "not changed"
-    global des_temp
+    global night_des_temp
+    global day_des_temp
     try :
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         print('Socket created')
@@ -198,14 +197,17 @@ def server(run_event):
             addr = d[1]
 
             if is_number(data):
-                des_temp = float(data.decode())
-                changed = "changed"
-                des_temp_file.write(str(des_temp))
+                if night:
+                    night_des_temp = float(data.decode())
+                    changed = "changed night desired temp"
+                    des_temp_file.write(str(des_temp))
+                else:
+                    day_des_temp = float(data.decode())
+                    changed = "changed day desired temp"
+                    des_temp_file.write(str(des_temp))
             else:
                 changed = "not changed"
                 data = current_temp
-
-
 
             send_list = [current_temp, str(heating_on_off), changed, str(des_temp), str(night)]
             reply = pickle.dumps(send_list)
@@ -428,7 +430,7 @@ def start():
         night_des_temp = float(des_temp_file.read())
     else:
         day_des_temp = float(des_temp_file.read())
-        
+
     try:
         while 1:
             time.sleep(.1)
