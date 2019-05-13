@@ -101,9 +101,6 @@ class App(threading.Thread):
             messgae = "temp please"
         self.root.focus_force()
 
-
-
-
 def get_temp(run_event):
     global current_temperature
     global app

@@ -97,7 +97,7 @@ class DesiredTemp:
         else:
             self.day_desired_temp = temp
 
-des_temp = DesiredTemp(22, 20, 21, 00, 6, 30)
+des_temp = DesiredTemp(21, 20, 21, 00, 7, 15) # set up the desired tempertatures and the night mode on and off times
 
 temp_adjust = 0.2 # amount that the buttons change temp
 

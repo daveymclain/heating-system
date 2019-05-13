@@ -66,8 +66,6 @@ sys.stdout = MyLogger(logger, logging.INFO)
 sys.stderr = MyLogger(logger, logging.ERROR)
 
 
-
-
 temp_adjust = 0.2 # amount that the buttons change temp
 
 des_temp = 20.0
@@ -173,7 +171,8 @@ def is_number(s):
 
 def server(run_event):
     changed = "not changed"
-    global des_temp
+    global night_des_temp
+    global day_des_temp
     try :
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         print('Socket created')
@@ -198,14 +197,17 @@ def server(run_event):
             addr = d[1]
 
             if is_number(data):
-                des_temp = float(data.decode())
-                changed = "changed"
-                des_temp_file.write(str(des_temp))
+                if night:
+                    night_des_temp = float(data.decode())
+                    changed = "changed"
+                    des_temp_file.write(str(des_temp))
+                else:
+                    day_des_temp = float(data.decode())
+                    changed = "changed"
+                    des_temp_file.write(str(des_temp))
             else:
                 changed = "not changed"
                 data = current_temp
-
-
 
             send_list = [current_temp, str(heating_on_off), changed, str(des_temp), str(night)]
             reply = pickle.dumps(send_list)
@@ -256,7 +258,7 @@ class NewButton():
                     else:
                         day_des_temp -= temp_adjust
                         des_temp_file.write(str(day_des_temp))
-                        
+
                 button_pressed = True
                 lcd_counter = 0
                 time.sleep(0.2)
@@ -334,18 +336,20 @@ def lcd_loop(run_event):
     while run_event.is_set():
         if night:
             n = "N "
+            temp_disp = night_des_temp
         else:
             n = "D "
+            temp_disp = day_des_temp
         if button_pressed == False:
             if len(str(turn_on_off_count)) > 1:
                 count_string = str(turn_on_off_count)
             else:
                 count_string = " " + str(turn_on_off_count)
             lcd_write(0, "Temp is:" + current_temp + " C" + count_string)
-            lcd_write(1,n + "Des temp:" + str(des_temp))
+            lcd_write(1,n + "Des temp:" + str(temp_disp))
         else:
             lcd_write(0, "Change des Temp")
-            lcd_write(1,n + "Des temp:" + str(des_temp))
+            lcd_write(1,n + "Des temp:" + str(temp_disp))
             lcd_counter += 1
             if lcd_counter == adjust_lcd_time:
                 button_pressed = False
@@ -398,10 +402,10 @@ def heating_on_off_logic(on_or_off):
 
 def start():
     global run_event
-    global des_temp
+    global night_des_temp
+    global day_des_temp
     print("Warming up")
     GPIO.output(bluePin, GPIO.HIGH)
-    des_temp = float(des_temp_file.read())
     servo(0)
     time.sleep(3)
     GPIO.output(bluePin, GPIO.LOW)
@@ -420,6 +424,13 @@ def start():
     t4.start()
     time.sleep(0.5)
     t5.start()
+    time.sleep(4)
+    # get stored desired temp and put it in current desired temp
+    if night:
+        night_des_temp = float(des_temp_file.read())
+    else:
+        day_des_temp = float(des_temp_file.read())
+
     try:
         while 1:
             time.sleep(.1)
